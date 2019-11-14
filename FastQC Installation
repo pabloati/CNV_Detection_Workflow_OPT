@@ -1,0 +1,11 @@
+#Installation of FastQC software for visualazing the sequences phredscore.
+
+First of all, we need to dowload the software and install it in our computer.
+  # Download the tool - note that you may need to change the version number
+wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.7.zip
+# unzip
+unzip fastqc_v0.11.7.zip 
+# make the tool executable
+chmod +x FastQC/fastqc
+# add FastQC to the Path
+export PATH=$PWD/FastQC:${PATH}
