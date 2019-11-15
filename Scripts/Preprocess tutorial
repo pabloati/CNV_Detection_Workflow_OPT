@@ -1,0 +1,19 @@
+#Downloading and prefetching of the SRA file
+prefetch SRR1552444
+
+#Extraction of fastq files
+mkdir fastq #Creation of a directoryfor the extracted fastq files
+for sraFile in sraDir/sra/*.sra; do
+ echo "Extracting fastq from "${sraFile}
+ fastq-dump \
+    --origfmt \
+    --gzip \
+    --outdir fastq \
+    ${sraFile}
+done
+
+#Running FastQC
+# make directory to output the results to
+mkdir fastqc
+# run fastqc
+fastqc -o fastqc fastq/*fastq.gz
