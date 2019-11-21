@@ -44,5 +44,6 @@ java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar Build
 
 #	Indel realignment using GATK
 java -Xmx20g -jar ~/Programs/gatk-4.1.4.0/gatk-package-4.1.4.0-local.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I PE0346_dedup.bam -o PE00346-forIndelRealigner.intervals
-
+java -Xmx20g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa -I PE0346_dedup.bam  -targetIntervals ls
+-o PE0346_indelrealigned.bam
 
