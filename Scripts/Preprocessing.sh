@@ -14,7 +14,7 @@ for i in $(ls *_paired_R1_001.fastq.gz); do
   
 #Aligning Single End Reads (SE) to reference genome using BWA mem. (The genome must be indexed prior to the aligment)
 for i in $(ls *_unpaired_*); do
-  name=$(echo $i | cut -d "_" -f 1,2,3,4) ; ID=$(echo $i | cut -d "_" -f 1) ; Rvi=$(echo $i | cut -d "_" -f 4)
+  name=$(echo $i | cut -d "_" -f 1,2,3,4) ; ID=$(echo $i | cut -d "_" -f 1) ; R=$(echo $i | cut -d "_" -f 4)
   bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:$ID\tPL:PE\tLB:no\tPU:unit1' ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz "$name""_001.fastq.gz" > "$ID""_""$R""_B73v4_SE.sam" 
   done
  
