@@ -27,8 +27,8 @@ bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:PE0346\tPL:SE\tLB:no\tPU:unit1' ~/Maize_
 #Sorting sam file and converting to bam with Picard (PE)
 java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar SortSam MAX_RECORDS_IN_RAM=2000000 INPUT=PE0346_Ch10_PE.sam OUTPUT="PE0346_Ch10_PE_sorted.bam" SORT_ORDER=coordinate
 
-#Sorting sam file and converting to bam with Picard (PE)
-java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar SortSam MAX_RECORDS_IN_RAM=2000000 INPUT=PE0346_Ch10_PE.sam OUTPUT="PE0346_Ch10_PE_sorted.bam" SORT_ORDER=coordinate
+#Sorting sam file and converting to bam with Picard (SE)
+java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar SortSam MAX_RECORDS_IN_RAM=2000000 INPUT=PE0346_Ch10_SE1.sam OUTPUT="PE0346_Ch10_SE1_sorted.bam" SORT_ORDER=coordinate
 
 #Merging data using samtools
 
@@ -37,13 +37,13 @@ for i in $(ls *bam | awk -F "_" '{print $1}' | uniq);do ls $i*.bam > "$i"."txt" 
 for i in $(ls *txt); do nombre=$(echo $i | awk -F "." '{print $1}'); samtools merge "$nombre""_merged.bam" -b $i; done
 
 #	Remove duplicates using picard tools
-java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar MarkDuplicates INPUT=PE0346_merged.bam OUTPUT=PE0346_dedup.bam REMOVE_DUPLICATES=true METRICS_FILE=PE0346_metrics.txt
+java -Xmx200g -XX:ParallelGCThreads=10 -jar ~/Programs/PicardTools/picard.jar MarkDuplicates INPUT=PE0346_merged.bam OUTPUT=PE0346_dedup.bam REMOVE_DUPLICATES=true METRICS_FILE=PE0346_metrics.txt
 
 #	Create index using picard tools
-java -Xmx20g -XX:ParallelGCThreads=10 -jar Programs/PicardTools/picard.jar BuildBamIndex INPUT=PE0346_dedup.bam
+java -Xmx200g -XX:ParallelGCThreads=10 -jar ~/Programs/PicardTools/picard.jar BuildBamIndex INPUT=PE0346_dedup.bam
 
 #	Indel realignment using GATK
-java -Xmx20g -jar ~/Programs/gatk-4.1.4.0/gatk-package-4.1.4.0-local.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I PE0346_dedup.bam -o PE00346-forIndelRealigner.intervals
+java -Xmx20g -jar ~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I PE0346_dedup.bam -o PE00346-forIndelRealigner.intervals
 java -Xmx20g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa -I PE0346_dedup.bam  -targetIntervals ls
 -o PE0346_indelrealigned.bam
 
