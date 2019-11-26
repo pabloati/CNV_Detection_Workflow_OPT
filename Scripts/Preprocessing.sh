@@ -44,20 +44,21 @@ for i in $(ls *txt); do
 #	Remove duplicates using picard tools
 for i in $(ls *_merged.bam); do
   name=$(echo $i | cut -d "_" -f 1)
-  java -Xmx20g -XX:ParallelGCThreads=10 -jar ~/Programs/PicardTools/picard.jar MarkDuplicates INPUT="$name""_merged.bam" OUTPUT="$name""_dedup.bam" REMOVE_DUPLICATES=true METRICS_FILE="$name""_metrics.txt"
+  java -Xmx200g -XX:ParallelGCThreads=10 -Djava.io.tmpdir=/scratch/ -jar ~/Programs/PicardTools/picard.jar MarkDuplicates INPUT="$name""_merged.bam" OUTPUT="$name""_dedup.bam" REMOVE_DUPLICATES=true METRICS_FILE="$name""_metrics.txt"
   done
 
 #	Create index using picard tools
 for i in $(ls *_dedup.bam); do
-  java -Xmx20g -XX:ParallelGCThreads=10 -jar ~/Programs/PicardTools/picard.jar BuildBamIndex INPUT=$i
+  java -Xmx200g -XX:ParallelGCThreads=10 -jar -Djava.io.tmpdir=/scratch/ ~/Programs/PicardTools/picard.jar BuildBamIndex INPUT=$i
   done
   
 #Indel realignment using GATK
 for i in $(ls *_dedup.bam); do
   name=$(echo $i | cut -d "." -vimf 1)
-  java -Xmx20g -jar ~/Programs/~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I $i -o "$name""-forIndelRealigner.intervals"
+  java -Xmx200g -jar ~/Programs/~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I $i -o "$name""-forIndelRealigner.intervals"
   done
 for i in $(ls *forIndelRealigner.intervals); do
   name=$(echo $i | cut -d "-" -f 1)
-  java -Xmx20g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa -I "$name"".bam"  -targetIntervals $i -o "$name""_indelrealigned.bam"
+  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa -I "$name"".bam"  -targetIntervals $i -o "$name""_indelrealigned.bam"
   done
+
