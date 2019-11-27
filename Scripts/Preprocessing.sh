@@ -54,8 +54,8 @@ for i in $(ls *_dedup.bam); do
   
 #Indel realignment using GATK
 for i in $(ls *_dedup.bam); do
-  name=$(echo $i | cut -d "." -vimf 1)
-  java -Xmx200g -jar ~/Programs/~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I $i -o "$name""-forIndelRealigner.intervals"
+  name=$(echo $i | cut -d "." -f 1)
+  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I $i -o "$name""-forIndelRealigner.intervals"
   done
 for i in $(ls *forIndelRealigner.intervals); do
   name=$(echo $i | cut -d "-" -f 1)
