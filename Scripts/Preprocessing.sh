@@ -9,13 +9,13 @@ for i in $(ls *_R1_001.fastq.gz); do
 #Aligning Paried End reads (PE) to reference genome using BWA mem. (The genome must be indexed prior to the aligment)
 for i in $(ls *_paired_R1_001.fastq.gz); do
   name=$(echo $i | cut -d "_" -f 1,2,3) ; ID=$(echo $i | cut -d "_" -f 1)
-  bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:$ID\tPL:PE\tLB:no\tPU:unit1' ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz "$name""_R1_001.fastq.gz" "$name""_R2_001.fastq.gz" > "$ID""_B7v4_PE.sam" 
+  bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:$ID\tPL:PE\tLB:no\tPU:unit1' ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa.gz "$name""_R1_001.fastq.gz" "$name""_R2_001.fastq.gz" > "$ID""_B7v4_PE.sam" 
   done
   
 #Aligning Single End Reads (SE) to reference genome using BWA mem. (The genome must be indexed prior to the aligment)
 for i in $(ls *_unpaired_*); do
   name=$(echo $i | cut -d "_" -f 1,2,3,4) ; ID=$(echo $i | cut -d "_" -f 1) ; R=$(echo $i | cut -d "_" -f 4)
-  bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:$ID\tPL:PE\tLB:no\tPU:unit1' ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz "$name""_001.fastq.gz" > "$ID""_""$R""_B73v4_SE.sam" 
+  bwa mem -t 10 -M -R '@RG\tID:NRGENE\tSM:$ID\tPL:PE\tLB:no\tPU:unit1' ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa.gz "$name""_001.fastq.gz" > "$ID""_""$R""_B73v4_SE.sam" 
   done
  
 #Sort files and convert to bam files PE using Picard Tools
