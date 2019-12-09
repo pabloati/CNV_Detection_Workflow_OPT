@@ -52,13 +52,19 @@ for i in $(ls *_dedup.bam); do
   java -Xmx200g -XX:ParallelGCThreads=10 -jar -Djava.io.tmpdir=/scratch/ ~/Programs/PicardTools/picard.jar BuildBamIndex INPUT=$i
   done
   
+#Preparing reference genome for GATK use
+#Creating fasta sequence dictionary file
+java -jar ~/Programs/PicardTools/picard.jar CreateSequenceDictionary R= ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa O= ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.dict
+#Creating the fasta index file
+~/Programs/samtools-1.9/samtools faidx ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa
+  
 #Indel realignment using GATK
 for i in $(ls *_dedup.bam); do
   name=$(echo $i | cut -d "." -f 1)
-  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa.gz -I $i -o "$name""-forIndelRealigner.intervals"
+  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T RealignerTargetCreator -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa -I $i -o "$name""-forIndelRealigner.intervals"
   done
 for i in $(ls *forIndelRealigner.intervals); do
   name=$(echo $i | cut -d "-" -f 1)
-  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.chromosome.10.fa -I "$name"".bam"  -targetIntervals $i -o "$name""_indelrealigned.bam"
+  java -Xmx200g -jar ~/Programs/GenomeAnalysisTK.jar -T IndelRealigner -R ~/Maize_RefGen/MaskedDNA/Zea_mays.AGPv4.dna_rm.toplevel.fa -I "$name"".bam"  -targetIntervals $i -o "$name""_indelrealigned.bam"
   done
 
