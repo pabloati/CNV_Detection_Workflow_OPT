@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #Extracting overlaping k-mer subsequences as read sequences
-~/Programs/Seqbility/splitfa ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa 35 | split -l 20000000
+~/Programs/Seqbility/splitfa ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa 35 > Splitted.fa 
 
 #Aligning reads to the genome
-bwa aln -R 1000000 -O 3 -E 3 ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa > B73v4.sai
+bwa aln -R 1000000 -O 3 -E 3 ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa Splitted.fa > B73v4.sai
 
 #Coverting .sai into .sam
 bwa samse ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa B73v4.sai > B73v4.sam
