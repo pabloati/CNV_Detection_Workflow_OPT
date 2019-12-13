@@ -1,6 +1,6 @@
 # Removal of suplementary reads
 for i in $(ls *_indelrealigned.bam); do
-name=$(echo i| cut -d '.' -f 1)
+name=$(echo $i | cut -d '.' -f 1)
  ~/Programs/samtools-1.9/samtools view -h -F 0x800 $i > "$name""_noSup.bam" 
 done 
 
