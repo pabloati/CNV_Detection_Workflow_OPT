@@ -7,7 +7,7 @@
 bwa aln -R 1000000 -O 3 -E 3 ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa Splitted.fa > B73v4.sai
 
 #Coverting .sai into .sam
-bwa samse ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa B73v4.sai > B73v4.sam
+bwa samse ~/Maize_RefGen/UnmaskedDNA/Zea_mays.AGPv4.dna.toplevel.fa B73v4.sai Splitted.fa  > B73v4.sam
 
 #Generate rawMask
 ~/Programs/Seqbility/gen_raw_mask.pl B73v4.sam > rawMask_35.fa
