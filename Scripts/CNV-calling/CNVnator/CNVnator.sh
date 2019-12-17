@@ -22,7 +22,7 @@ name=$(echo $i | cut -d "." -f 1)
   ~/Programs/CNVnator/cnvnator -root $i -call 1000 > "$name""_1000_CNVnator.cnv" 
   done
 
-#Conversion of .cnvfile to common format 
+#Conversion of .cnv file to common format 
 for i in $(ls *.cnv); do 
   name=$(echo $i | cut -d '_' -f 1,3)
   python /data/home/ge97xak/Programs/TCAG-WGS-CNV-workflow/convert_CNV_calls_to_common_format.py $i CNVnator > "$name""_1000_comformat_CNVnator.txt"
