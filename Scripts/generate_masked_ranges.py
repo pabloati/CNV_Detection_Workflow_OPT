@@ -29,7 +29,7 @@ else:
     raise SystemExit
 
 
-n, state = 0, 0 # line, character, state (0=Out of gap; 1=In Gap)
+n, state = 1, 0 # line, character, state (0=Out of gap; 1=In Gap)
 chrom, start, end = None, None, None
 
 with input_fasta as f:
@@ -40,7 +40,7 @@ with input_fasta as f:
             if state == 1:
                 print '\t'.join([chrom ,str(start), str(n)])
                 start, end, state  = 0, 0, 0
-            n = 0 # Reset character
+            n = 1 # Reset character
             chrom = line.split(" ")[0].replace(">","")
             # If user specifies, replace chromosome as well
             if len(sys.argv) > 2:
