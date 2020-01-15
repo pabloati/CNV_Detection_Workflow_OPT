@@ -31,7 +31,6 @@ else:
 
 n, state = 1, 0 # line, character, state (0=Out of gap; 1=In Gap)
 chrom, start, end = None, None, None
-bases=str(atgc)
 
 with input_fasta as f:
     for line in f:
@@ -48,10 +47,10 @@ with input_fasta as f:
                 chrom = chrom.replace(sys.argv[2],sys.argv[3])
         else:
             for char in line:
-                if state == 0 and char in bases:
+                if state == 0 and char in ["a","t","g","c"]:
                     state = 1
                     start = n
-                elif state == 1 and char not in "N":
+                elif state == 1 and char not in ["a","t","g","c"]:
                     state = 0
                     end = n
                     print '\t'.join([chrom ,str(start), str(end)])
