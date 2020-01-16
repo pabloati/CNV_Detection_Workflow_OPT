@@ -2,9 +2,9 @@
 
 #Filtering with mappability and masked bedfile
 for i in $(ls ~/Files/Pablo_Results/Bedfiles/*_bedfile.txt); do
-  Filtro=$(echo $i | cut -d '/' -f 5 | cut -d '_' -f 1)
+  Filtro=$(echo $i | cut -d '/' -f 8 | cut -d '_' -f 1)
   for j in $(ls ~/Files/Pablo_Results/CNVs_Filtering/*_overlap.txt); do
-    vimname=$(echo $j | cut -d '/' -f 5 | cut -d '.' -f 1)
-    echo ~/Programs/TCAG-WGS-CNV-workflow/compare_CNVs_to_benchmark.py $name.txt $i > $Filtro/"$name"".txt.bm"
+    name=$(echo $j | cut -d '/' -f 8 | cut -d '.' -f 1)
+    ~/Programs/Python-3.8.1/python ~/Programs/TCAG-WGS-CNV-workflow/compare_CNVs_to_benchmark.py $name.txt $i > $Filtro/"$name"".txt.bm"
     done
   done
