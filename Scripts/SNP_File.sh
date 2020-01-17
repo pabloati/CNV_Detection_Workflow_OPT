@@ -8,7 +8,7 @@ for i in $(ls *.vcf.gz); do
 
 for i in $(seq 1 10); do 
   if [ $i -eq 1] ; then
-    cat ""$i""_7_filtered_PASS.vcf" > All_filtered_PASS.vcf
+    cat "CHr""$i""_7_filtered_PASS.vcf" > All_filtered_PASS.vcf
   else
     cat filtered_PASS.vcf "CHr""$i""_7_filtered_PASS.vcf" > All_filtered_PASS.vcf
   fi
