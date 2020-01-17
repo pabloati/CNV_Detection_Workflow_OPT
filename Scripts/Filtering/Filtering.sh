@@ -15,3 +15,8 @@ for i in $(ls *_noSup.bam); do
   name=$(echo $i | cut -d '_' -f 1)
    ~/Programs/samtools-1.9/samtools view -h $i | perl samparser.sh -e 50 --mm 2 50 --insert 150 10000 -i - |  ~/Programs/samtools-1.9/samtools view -Sb - > "$name""_noSup_10k_filtered.bam"
   done
+
+#Create bam index
+for i in $(ls *.bam); do
+  ~/Programs/samtools-1.9/samtools index $i
+  done
