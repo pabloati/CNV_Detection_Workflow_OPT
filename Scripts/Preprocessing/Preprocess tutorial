@@ -1,0 +1,40 @@
+#Downloading and prefetching of the SRA file
+prefetch SRR1552444
+
+#Extraction of fastq files
+mkdir fastq #Creation of a directoryfor the extracted fastq files
+for sraFile in sraDir/sra/*.sra; do
+ echo "Extracting fastq from "${sraFile}
+ fastq-dump \
+    --origfmt \
+    --gzip \
+    --outdir fastq \
+    ${sraFile}
+done
+
+# make directory to output the results to
+mkdir fastqc
+# run fastqc
+fastqc -o fastqc fastq/*fastq.gz
+
+#Running Trimmomatic (Default settings for single end)
+java -jar ~/Programs/Trimmomatic-0.39/trimmomatic-0.39.jar SE -threads 10 -phred33 input.fastq output.fq.gz LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+
+# Downloading reference data
+# create a reference directory
+mkdir -p referenceData/fasta
+cd referenceData/fasta
+# download the fasta file
+wget ftp://ftp.ensembl.org/pub/release-80/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz 
+gunzip Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz 
+
+# Download the GTF file
+cd ..
+mkdir annotations
+cd annotations
+wget ftp://ftp.ensembl.org/pub/release-80/gtf/mus_musculus/Mus_musculus.GRCm38.80.gtf.gz 
+gunzip Mus_musculus.GRCm38.80.gtf.gz 
+
+# return to project directory
+cd ../../
